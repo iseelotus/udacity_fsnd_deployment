@@ -48,3 +48,4 @@ To build the image, run the following command:
 Run the image:
 
 `docker run --publish 80:8080 --name jwt jwt-api-test -e env-file=env_file`
+
