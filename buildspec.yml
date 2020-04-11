@@ -10,8 +10,14 @@ phases:
       - chmod +x ./kubectl ./aws-iam-authenticator
       - export PATH=$PWD/:$PATH
       - apt-get -y remove python3.4 python3-dev
-      - apt-get update && apt-get -y install python3.5 python3.5-dev jq python3-pip python3-dev && pip3 install --upgrade awscli
-  pre_build:
+      - apt-get update
+      - apt-get -y install software-properties-common
+      - add-apt-repository ppa:deadsnakes/ppa
+      - apt-get -y install python3.5 python3.5-dev jq
+      - curl https://bootstrap.pypa.io/ez_setup.py -o - | python3.5
+      - easy_install pip
+      - ln -sf /usr/bin/python3.5 /usr/local/bin/python3  
+    pre_build:
       commands:
         - TAG="$REPOSITORY_NAME.$REPOSITORY_BRANCH.$ENVIRONMENT_NAME.$(date +%Y-%m-%d.%H.%M.%S).$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | head -c 8)"
         - sed -i 's@CONTAINER_IMAGE@'"$REPOSITORY_URI:$TAG"'@' simple_jwt_api.yml
